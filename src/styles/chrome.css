@@ -1,0 +1,253 @@
+/* The corner grid. Every cell is a flex or grid column; hero-only and links-only blocks share a
+   cell by stacking in the same grid area, so a hidden block never leaves a gap behind. */
+
+.ui .chrome {
+  position: absolute;
+  inset: 0;
+  padding: var(--gutter);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'tl . tr'
+    '. . .'
+    'bl bc br';
+  column-gap: 20px;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.ui .chrome.is-live {
+  opacity: 1;
+}
+
+.ui .slot {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.ui .slot--tl {
+  grid-area: tl;
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  align-self: start;
+}
+
+/* Meta lines (hero) and credits (links) occupy the same row. */
+.ui .slot--tl > :nth-child(n + 2) {
+  grid-row: 2;
+  grid-column: 1;
+}
+
+.ui .slot--tr {
+  grid-area: tr;
+  display: grid;
+  justify-items: end;
+  align-self: start;
+  text-align: right;
+}
+
+.ui .slot--tr > * {
+  grid-area: 1 / 1;
+}
+
+.ui .slot--bl {
+  grid-area: bl;
+  align-self: end;
+  align-items: flex-start;
+}
+
+/* The bottom corners sit over whatever the scene draws there (the bright platform rim, the
+   descent streaks), so each gets a soft dark pool behind its text. It is a pseudo-element, so it
+   follows the size of whatever the corner currently holds. */
+.ui .slot--bl,
+.ui .slot--br {
+  position: relative;
+  isolation: isolate;
+}
+
+.ui .slot--bl::before,
+.ui .slot--br::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -56px -84px calc(var(--gutter) * -1) -84px;
+  pointer-events: none;
+}
+
+.ui .slot--bl::before {
+  background: radial-gradient(ellipse at 0% 100%, color-mix(in srgb, var(--c-void) 78%, transparent) 0%, color-mix(in srgb, var(--c-void) 46%, transparent) 45%, transparent 75%);
+}
+
+.ui .slot--br::before {
+  background: radial-gradient(ellipse at 100% 100%, color-mix(in srgb, var(--c-void) 78%, transparent) 0%, color-mix(in srgb, var(--c-void) 46%, transparent) 45%, transparent 75%);
+}
+
+.ui .slot--bc {
+  grid-area: bc;
+  align-self: end;
+  justify-self: center;
+}
+
+.ui .slot--br {
+  grid-area: br;
+  align-self: end;
+  align-items: flex-end;
+  text-align: right;
+  /* The footer stack and the chapter readout are separate things; keep clear air between them. */
+  gap: 24px;
+}
+
+/* Top-left */
+
+.ui .wordmark {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(22px, 1.1vw + 14px, 34px);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: 0.04em;
+  text-shadow:
+    0 0 22px color-mix(in srgb, var(--c-cyan) 60%, transparent),
+    0 0 3px color-mix(in srgb, var(--c-cyan) 45%, transparent);
+}
+
+.ui .meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--fs);
+}
+
+.ui .meta__line {
+  margin: 0;
+  /* Narrow screens wrap these lines; balanced wrapping avoids a lone word on the second line. */
+  text-wrap: balance;
+}
+
+.ui .meta__line--dim {
+  color: var(--c-dim);
+}
+
+/* Top-right */
+
+.ui .manifesto {
+  max-width: 30ch;
+  font-size: var(--fs-small);
+  line-height: 1.5;
+}
+
+.ui .manifesto__label {
+  margin-bottom: 14px;
+  font-size: var(--fs);
+}
+
+.ui .manifesto__text + .manifesto__text {
+  margin-top: 8px;
+}
+
+/* Bottom-left */
+
+.ui .scroll-hint {
+  max-width: 14ch;
+  font-size: var(--fs-small);
+}
+
+.ui .sound {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  /* Padding enlarges the hit area; the matching negative margin keeps the label on the grid line. */
+  padding: 8px;
+  margin: -8px;
+  font-size: var(--fs-small);
+  letter-spacing: 0.02em;
+}
+
+.ui .sound__icon {
+  flex: none;
+}
+
+.ui .sound__muted {
+  display: block;
+}
+
+.ui .sound__waves {
+  display: none;
+}
+
+.ui .sound.is-on .sound__muted {
+  display: none;
+}
+
+.ui .sound.is-on .sound__waves {
+  display: block;
+}
+
+/* Bottom-right */
+
+.ui .readout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.ui .readout__text {
+  font-size: var(--fs-small);
+  letter-spacing: 0.14em;
+}
+
+.ui .meter {
+  position: relative;
+  width: clamp(72px, 7vw, 110px);
+  height: 1px;
+  background: var(--line-faint);
+}
+
+.ui .meter__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--c-cyan);
+  box-shadow: 0 0 8px var(--c-cyan);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+@media (max-width: 639px) {
+  .ui .chrome {
+    /* The right column carries the wider text (email, stack), so it gets the larger share. */
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    grid-template-areas:
+      'tl tr'
+      '. .'
+      'bc bc'
+      'bl br';
+    column-gap: 12px;
+  }
+
+  .ui .slot--bc {
+    justify-self: stretch;
+    margin-bottom: 18px;
+  }
+
+  .ui .wordmark {
+    font-size: 21px;
+  }
+
+  /* One short paragraph, at most four lines: the full text lives on the static page. */
+  .ui .manifesto__text + .manifesto__text {
+    display: none;
+  }
+
+  .ui .manifesto__label + .manifesto__text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

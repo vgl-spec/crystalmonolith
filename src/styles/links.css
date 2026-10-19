@@ -1,0 +1,207 @@
+/* Links chapter: arrows, bracketed carousel and the footer in the corners. */
+
+.ui .links {
+  position: absolute;
+  inset: 0;
+  --arrow-width: 78px;
+}
+
+.ui .arrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  padding: 22px 16px;
+  margin-top: -28px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.ui .arrow--prev {
+  left: max(calc(var(--gutter) - 16px), calc(14vw - 16px));
+}
+
+.ui .arrow--next {
+  right: max(calc(var(--gutter) - 16px), calc(14vw - 16px));
+}
+
+.ui .arrow__icon {
+  display: block;
+  width: var(--arrow-width);
+  height: 12px;
+  overflow: visible;
+  transition: transform 0.25s ease;
+}
+
+.ui .arrow:hover {
+  opacity: 1;
+  color: var(--c-cyan);
+}
+
+.ui .arrow--prev:hover .arrow__icon {
+  transform: translateX(-6px);
+}
+
+.ui .arrow--next:hover .arrow__icon {
+  transform: translateX(6px);
+}
+
+/* Carousel: the selected label stays on the centre line whatever its neighbours' lengths. */
+.ui .carousel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
+  width: min(560px, 100%);
+  font-size: 13px;
+}
+
+.ui .carousel__side {
+  padding: 10px 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--c-dim);
+  transition: color 0.2s ease;
+}
+
+.ui .carousel__side--prev {
+  text-align: right;
+  mask-image: linear-gradient(to left, #000 35%, transparent);
+}
+
+.ui .carousel__side--next {
+  text-align: left;
+  mask-image: linear-gradient(to right, #000 35%, transparent);
+}
+
+.ui .carousel__side:hover {
+  color: var(--c-ink);
+}
+
+.ui .carousel__selected {
+  position: relative;
+  min-width: 128px;
+  padding: 11px 26px;
+  text-align: center;
+  --bracket-size: 11px;
+}
+
+.ui .carousel__current {
+  display: inline-block;
+  color: var(--c-ink);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.ui a.carousel__current:hover {
+  color: var(--c-cyan);
+}
+
+/* Not published yet: shown, dimmed, never a dead link. */
+.ui .carousel__current--soon {
+  color: var(--c-dim);
+  cursor: default;
+}
+
+/* Footer ---------------------------------------------------------------------------------------- */
+
+.ui .footer-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  max-width: min(100%, 34ch);
+  text-align: right;
+}
+
+.ui .footer-head__text {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+.ui .footer-head__mail {
+  padding-bottom: 2px;
+  font-size: var(--fs);
+  color: var(--c-cyan);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--c-cyan) 55%, transparent);
+  overflow-wrap: anywhere;
+}
+
+.ui .footer-head__mail:hover {
+  color: var(--c-ink);
+  border-bottom-color: var(--c-ink);
+}
+
+.ui .stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 30ch;
+  font-size: var(--fs-small);
+}
+
+.ui .stack__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 2px 10px;
+  list-style: none;
+  color: var(--c-ink);
+}
+
+.ui .credits {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 34ch;
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: var(--c-dim);
+}
+
+.ui .credits__line {
+  margin: 0;
+}
+
+@media (max-width: 899px) {
+  /* The side labels need room the corner cells cannot spare; the arrows still move the selection. */
+  .ui .carousel {
+    grid-template-columns: auto;
+    justify-content: center;
+    width: auto;
+  }
+
+  .ui .carousel__side {
+    display: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .ui .links {
+    --arrow-width: 44px;
+  }
+
+  .ui .arrow--prev {
+    left: calc(var(--gutter) - 14px);
+  }
+
+  .ui .arrow--next {
+    right: calc(var(--gutter) - 14px);
+  }
+
+  .ui .carousel {
+    font-size: 12px;
+  }
+
+  .ui .footer-head__text {
+    font-size: 11px;
+  }
+
+  .ui .credits {
+    font-size: 8.5px;
+  }
+}

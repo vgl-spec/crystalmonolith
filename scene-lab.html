@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="data:," />
+    <title>Scene lab</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #05070a;
+        overflow: hidden;
+        font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace;
+        color: #e8edf2;
+      }
+      canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+      #panel {
+        position: fixed;
+        left: 12px;
+        bottom: 12px;
+        width: min(420px, calc(100vw - 24px));
+        padding: 10px 12px;
+        background: rgba(5, 7, 10, 0.78);
+        border: 1px solid rgba(34, 200, 238, 0.35);
+        display: grid;
+        grid-template-columns: 64px 1fr 56px;
+        gap: 4px 8px;
+        align-items: center;
+      }
+      #panel input[type='range'] {
+        width: 100%;
+        accent-color: #22c8ee;
+      }
+      #panel select,
+      #panel button {
+        grid-column: 2 / 4;
+        font: inherit;
+        color: inherit;
+        background: #0b0f14;
+        border: 1px solid #0e3a5c;
+        padding: 2px 4px;
+      }
+      #status {
+        grid-column: 1 / 4;
+        color: #8a97a6;
+      }
+      #hud {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+      }
+      #hud span {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 14px;
+        height: 14px;
+        margin: -7px 0 0 -7px;
+        border: 1px solid #e8edf2;
+        border-radius: 50%;
+        font-size: 9px;
+        line-height: 12px;
+        text-align: center;
+        display: none;
+      }
+      #hud span.project {
+        border-radius: 0;
+        border-color: #2dd4c4;
+        color: #2dd4c4;
+      }
+      #error {
+        position: fixed;
+        inset: 0 0 auto 0;
+        padding: 12px;
+        background: #3a0d0d;
+        color: #ffd6d6;
+        white-space: pre-wrap;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="stage"></canvas>
+    <div id="hud"></div>
+    <div id="panel">
+      <label for="pos">pos</label>
+      <input id="pos" type="range" min="0" step="10" />
+      <output id="pos-out"></output>
+      <label for="intro">intro</label>
+      <input id="intro" type="range" min="0" max="1" step="0.01" />
+      <output id="intro-out"></output>
+      <label for="link">link</label>
+      <input id="link" type="range" min="0" step="1" />
+      <output id="link-out"></output>
+      <label for="open">open</label>
+      <select id="open"></select>
+      <label for="quality">quality</label>
+      <select id="quality">
+        <option>high</option>
+        <option>medium</option>
+        <option>low</option>
+      </select>
+      <label for="play">play</label>
+      <button id="play" type="button">scroll forward</button>
+      <div id="status"></div>
+    </div>
+    <pre id="error"></pre>
+    <script type="module" src="/src/scene/lab.ts"></script>
+  </body>
+</html>

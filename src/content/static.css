@@ -1,0 +1,159 @@
+/*
+ * The static page (#static-content). Two modes:
+ *   - default: visually hidden but fully readable by screen readers and crawlers, while the WebGL experience runs;
+ *   - html.no-webgl (added by the UI's showFallback) or no JavaScript: a readable dark page, canvas and overlay hidden.
+ * The <noscript> block in index.html mirrors the mode switch below; keep the two in step.
+ */
+@layer base {
+  /* Standard visually-hidden pattern; unlike display:none or visibility:hidden it stays in the accessibility tree. */
+  .sc {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  html.no-webgl,
+  html.no-webgl body {
+    height: auto;
+    overflow: auto;
+    overscroll-behavior: auto;
+  }
+
+  html.no-webgl #gl,
+  html.no-webgl #ui {
+    display: none;
+  }
+
+  html.no-webgl .sc {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+
+  /* The look of the readable page. Applies in the hidden mode too, where it is simply never seen. */
+  .sc__page {
+    --sc-rule: color-mix(in srgb, var(--cyan) 22%, transparent);
+    max-width: 70ch;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 6vw, 4rem) 1.25rem 4rem;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .sc__page h1 {
+    margin-bottom: 0.5rem;
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .sc__page header p {
+    color: var(--dim);
+  }
+
+  .sc__page h2 {
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sc-rule);
+    color: var(--cyan);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .sc__page h2::before {
+    content: '////// ';
+    color: var(--dim);
+  }
+
+  .sc__page h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .sc__page p + p {
+    margin-top: 1rem;
+  }
+
+  .sc__page a {
+    color: var(--cyan);
+    text-underline-offset: 0.2em;
+  }
+
+  .sc__page a:hover {
+    color: var(--teal);
+  }
+
+  .sc__page a:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+  }
+
+  .sc__facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16ch, 1fr));
+    gap: 1.25rem;
+  }
+
+  .sc__facts > div {
+    padding-left: 0.875rem;
+    border-left: 2px solid var(--sc-rule);
+  }
+
+  .sc__facts dt {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .sc__facts dd {
+    margin: 0;
+    color: var(--dim);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .sc__projects {
+    display: grid;
+    gap: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sc__projects article {
+    padding: 1.25rem;
+    border: 1px solid var(--sc-rule);
+    background: var(--surface);
+  }
+
+  .sc__meta {
+    margin-top: 0.25rem;
+    color: var(--dim);
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .sc__page ul:not(.sc__projects) {
+    padding-left: 1.25rem;
+  }
+
+  .sc__page footer p {
+    color: var(--dim);
+  }
+}

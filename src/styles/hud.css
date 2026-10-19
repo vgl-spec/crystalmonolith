@@ -1,0 +1,316 @@
+/* Backdrop, hero constellation and project callouts. */
+
+/* Backdrop ------------------------------------------------------------------------------------ */
+
+.ui .backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.ui .backdrop__grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at center, color-mix(in srgb, var(--c-cyan) 60%, transparent) 0 1px, transparent 1.6px);
+  background-size: 72px 72px;
+  background-position: center;
+  opacity: 0;
+}
+
+.ui .backdrop__numbers {
+  position: absolute;
+  inset: 0;
+}
+
+.ui .backdrop__number {
+  position: absolute;
+  top: 0;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-size: calc(clamp(52px, 6.4vw, 96px) * var(--scale, 1));
+  color: color-mix(in srgb, var(--c-blue) 80%, var(--c-ink));
+  opacity: 0.16;
+  filter: blur(6px);
+  will-change: transform;
+}
+
+.ui .backdrop__wall {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(var(--gutter) * 2.6) 0;
+  mask-image: radial-gradient(ellipse at center, transparent 18%, #000 85%);
+}
+
+.ui .backdrop__row {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  color: var(--c-ink);
+  opacity: 0.055;
+}
+
+/* Hero constellation -------------------------------------------------------------------------- */
+
+.ui .hero-hud {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ui .hero-hud__segment {
+  stroke: var(--line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ui .hero-hud__cross {
+  fill: none;
+  stroke: var(--c-ink);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ui .hero-hud__number,
+.ui .hero-hud__value {
+  font-family: var(--font-mono);
+  /* A dark halo keeps the digits readable over the bright monolith. */
+  paint-order: stroke;
+  stroke: color-mix(in srgb, var(--c-void) 70%, transparent);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  text-shadow: none;
+}
+
+.ui .is-flipped .hero-hud__number,
+.ui .is-flipped .hero-hud__value {
+  text-anchor: end;
+}
+
+.ui .hero-hud__number {
+  fill: var(--c-ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ui .hero-hud__value {
+  fill: color-mix(in srgb, var(--c-ink) 62%, var(--c-dim));
+  font-size: 9px;
+  letter-spacing: 0.04em;
+}
+
+/* Project callouts ---------------------------------------------------------------------------- */
+
+.ui .phud {
+  position: absolute;
+  inset: 0;
+  /* Offsets from the scene anchor to each callout, shared by its text and its leader line. */
+  --t-dx: 82px;
+  --t-dy: 72px;
+  --r-dx: 30px;
+  --r-dy: 30px;
+  --c-dx: 22px;
+  --c-dy: 40px;
+  /* How far the call-to-action's text runs back past its attach point toward the anchor's side. */
+  --c-hang: 94px;
+  --title-max: 260px;
+  font-size: var(--fs);
+}
+
+/* A zero-size box at the origin that translate3d moves onto the anchor. Inside it, --ax and --ay
+   (-1 or 1, set from data-ax and data-ay by project-hud.ts) say which side of the anchor the text
+   sits on, and everything is placed from that, so flipping a callout away from a screen edge is a
+   one-attribute change that moves its leader and its text together. */
+.ui .callout {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  will-change: transform;
+  --ax: -1;
+  --ay: -1;
+}
+
+.ui .callout[data-ax='1'] {
+  --ax: 1;
+}
+
+.ui .callout[data-ay='1'] {
+  --ay: 1;
+}
+
+.ui .callout--title {
+  --dx: var(--t-dx);
+  --dy: var(--t-dy);
+  --hang: 0px;
+}
+
+.ui .callout--readout {
+  --dx: var(--r-dx);
+  --dy: var(--r-dy);
+  --hang: 0px;
+}
+
+.ui .callout--cta {
+  --dx: var(--c-dx);
+  --dy: var(--c-dy);
+  --hang: var(--c-hang);
+}
+
+.ui .callout__dot {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--c-ink);
+  background: color-mix(in srgb, var(--c-cyan) 70%, transparent);
+  box-shadow: 0 0 10px var(--c-cyan);
+}
+
+/* The leader is a unit diagonal stretched to dx by dy and mirrored by the scale, so it always runs
+   from the anchor to the corner where the text block attaches. The stroke ignores the stretch. */
+.ui .leader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--dx);
+  height: var(--dy);
+  overflow: visible;
+  transform-origin: 0 0;
+  transform: scale(var(--ax), var(--ay));
+}
+
+.ui .leader line {
+  stroke: var(--line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The block attaches to the leader by its corner nearest the anchor; percentages in the translate
+   are of the block's own size, so no width is needed to hang it to the left or above. */
+.ui .callout__block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: max-content;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  transform: translate(
+    calc(var(--ax) * (var(--dx) - var(--hang)) - (1 - var(--ax)) * 50%),
+    calc(var(--ay) * var(--dy) - (1 - var(--ay)) * 50%)
+  );
+}
+
+/* Text below its leader: the rule moves to the side that faces the leader. */
+.ui .callout[data-ay='1'] .callout__block {
+  padding-top: 6px;
+  padding-bottom: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+}
+
+.ui .callout__block--title {
+  max-width: var(--title-max);
+}
+
+.ui .callout__row,
+.ui .callout__name {
+  margin: 0;
+}
+
+.ui .callout__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 3px;
+  color: var(--ink-soft);
+}
+
+.ui .callout__row .tag:first-of-type {
+  margin-left: 10px;
+}
+
+.ui .callout__block--readout {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 0 16px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.ui .readout-key {
+  color: var(--c-dim);
+  letter-spacing: 0.1em;
+}
+
+.ui .readout-value {
+  text-align: right;
+}
+
+.ui .callout__block--cta {
+  display: flex;
+  flex-direction: column;
+  letter-spacing: 0.04em;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.ui .callout--cta[data-ax='-1'] .callout__block {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.ui .callout--cta[data-ax='1'] .callout__block {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* A larger invisible target than the two short lines of text. */
+.ui .callout__block--cta::before {
+  content: '';
+  position: absolute;
+  inset: -12px -10px -6px;
+}
+
+.ui .callout__block--cta:hover,
+.ui .callout__block--cta:focus-visible {
+  color: var(--c-cyan);
+  border-color: var(--c-cyan);
+}
+
+.ui .callout__block--cta[aria-disabled='true'] {
+  pointer-events: none;
+}
+
+@media (max-width: 639px) {
+  .ui .phud {
+    --t-dx: 38px;
+    --t-dy: 44px;
+    --r-dx: 18px;
+    --r-dy: 22px;
+    --c-dx: 14px;
+    --c-dy: 30px;
+    --c-hang: 50px;
+    --title-max: 42vw;
+  }
+
+  .ui .callout__block {
+    letter-spacing: 0.02em;
+  }
+
+  .ui .tag {
+    margin-left: 5px;
+    font-size: 8px;
+    padding: 0 3px;
+  }
+}

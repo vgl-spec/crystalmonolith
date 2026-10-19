@@ -1,0 +1,8 @@
+/* Overlay stylesheet. Colours and the font family arrive as custom properties set from
+   src/contracts.ts (PALETTE, FONT_FAMILY) by src/ui/index.ts, so they are defined in one place. */
+@import './base.css';
+@import './preloader.css';
+@import './chrome.css';
+@import './hud.css';
+@import './panel.css';
+@import './links.css';

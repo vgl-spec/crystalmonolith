@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#05070A" />
+    <link rel="icon" type="image/png" href="/brand/zelarion-mark.png" />
+    <!--head-tags-->
+    <!-- Critical style: the void colour paints before any bundle arrives, so the first frame is never white. -->
+    <style>
+      html {
+        background: #05070a;
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        background: #05070a;
+      }
+    </style>
+    <noscript>
+      <!--
+        Without JavaScript nothing adds html.no-webgl, so reveal the static page here. These rules mirror the
+        html.no-webgl block in src/content/static.css; the bundled styles sit in @layer base, so these
+        unlayered rules win regardless of source order.
+      -->
+      <style>
+        html,
+        body {
+          height: auto;
+          overflow: auto;
+        }
+        #gl,
+        #ui {
+          display: none;
+        }
+        .sc {
+          position: static;
+          width: auto;
+          height: auto;
+          margin: 0;
+          overflow: visible;
+          clip-path: none;
+          white-space: normal;
+        }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <canvas id="gl" aria-hidden="true"></canvas>
+    <div id="ui"></div>
+    <main id="static-content" class="sc"><!--static-content--></main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,177 @@
+/* Root, layers, shared primitives and the accessibility baseline. */
+
+.ui {
+  /* Fallback only: src/ui/viewport.ts sets the real value on resize, so JS clamping and CSS agree. */
+  --gutter: 16px;
+  --fs: 12px;
+  --fs-small: 10.5px;
+  --line: color-mix(in srgb, var(--c-ink) 62%, transparent);
+  --line-faint: color-mix(in srgb, var(--c-ink) 28%, transparent);
+  --ink-soft: color-mix(in srgb, var(--c-ink) 82%, transparent);
+  --legibility: 0 0 14px color-mix(in srgb, var(--c-void) 85%, transparent);
+
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  /* Only real controls take the pointer; everything else lets the canvas have it. */
+  pointer-events: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs);
+  line-height: 1.45;
+  color: var(--c-ink);
+  text-shadow: var(--legibility);
+  -webkit-font-smoothing: antialiased;
+}
+
+.ui *,
+.ui *::before,
+.ui *::after {
+  box-sizing: border-box;
+}
+
+.ui :where(p, h2, h3, ul, figure) {
+  margin: 0;
+  padding: 0;
+}
+
+.ui [hidden] {
+  display: none !important;
+}
+
+/* Written by presenceWriter(): too faint to be a target, so it is out of reach for pointer and keyboard. */
+.ui .is-off {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.ui .layer {
+  position: absolute;
+  inset: 0;
+}
+
+.ui .layer--hud {
+  transition: opacity 0.3s ease;
+}
+
+/* A project is open: the dim panel covers the HUD, so the HUD steps aside rather than ghosting through. */
+.ui.has-panel .layer--hud {
+  opacity: 0;
+}
+
+.ui .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Controls: reset the browser look, restore the pointer. */
+.ui :where(button, a) {
+  pointer-events: auto;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-shadow: inherit;
+}
+
+.ui button {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.ui :where(button, a):focus-visible {
+  outline: 2px solid var(--c-cyan);
+  outline-offset: 4px;
+  border-radius: 1px;
+}
+
+.ui .label {
+  color: var(--c-dim);
+  font-weight: 400;
+  font-size: inherit;
+  letter-spacing: 0.02em;
+}
+
+/* Status tags beside a title: CONCEPT is work we invented, PLACEHOLDER is copy still to be written. */
+.ui .tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 5px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  vertical-align: 1px;
+  border: 1px solid currentColor;
+}
+
+.ui .tag--concept {
+  color: var(--c-teal);
+}
+
+.ui .tag--placeholder {
+  color: var(--c-dim);
+  border-style: dashed;
+}
+
+/* Four-corner frame around a control or image. The parent is position: relative. */
+.ui .bracket {
+  position: absolute;
+  width: var(--bracket-size, 9px);
+  height: var(--bracket-size, 9px);
+  border: 0 solid var(--bracket-color, var(--c-ink));
+  pointer-events: none;
+}
+
+.ui .bracket--tl {
+  top: 0;
+  left: 0;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+
+.ui .bracket--tr {
+  top: 0;
+  right: 0;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+.ui .bracket--bl {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+
+.ui .bracket--br {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+@media (max-width: 639px) {
+  .ui {
+    --fs: 10px;
+    --fs-small: 9px;
+  }
+}
+
+/* Reduced motion: no movement, no transitions. Opacity still changes, instantly. */
+@media (prefers-reduced-motion: reduce) {
+  .ui,
+  .ui *,
+  .ui *::before,
+  .ui *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

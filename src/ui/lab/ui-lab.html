@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UI lab</title>
+    <link rel="icon" href="data:," />
+    <style>
+      /* Dev-only harness: a dark stand-in for the WebGL canvas so the overlay can be judged on its own. */
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #05070a;
+        overflow: hidden;
+      }
+      .stage {
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(ellipse at 50% 55%, #11405f 0%, #08121c 48%, #05070a 100%);
+      }
+      .stage__shard {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: min(22vw, 300px);
+        height: min(56vh, 480px);
+        translate: -50% -50%;
+        background: linear-gradient(160deg, #2dd4c4 0%, #1f8fe0 40%, #0e3a5c 100%);
+        clip-path: polygon(50% 0, 88% 22%, 100% 70%, 62% 100%, 18% 86%, 0 34%);
+        opacity: 0.55;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage"><div class="stage__shard"></div></div>
+    <div id="ui"></div>
+    <script type="module" src="./ui-lab.ts"></script>
+  </body>
+</html>

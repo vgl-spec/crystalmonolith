@@ -1,0 +1,18 @@
+.ui .preloader {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  display: grid;
+  place-items: center;
+  background: var(--c-void);
+  /* Swallows input until the canvas is ready to be seen. */
+  pointer-events: auto;
+}
+
+.ui .preloader__bar {
+  font-size: clamp(11px, 1.15vw + 4px, 16px);
+  letter-spacing: 0.06em;
+  white-space: pre;
+  color: var(--c-ink);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--c-cyan) 55%, transparent);
+}

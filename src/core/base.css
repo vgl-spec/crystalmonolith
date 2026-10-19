@@ -1,0 +1,71 @@
+/*
+ * Page reset and the two fixed layers (WebGL canvas, UI overlay). Everything sits in @layer base so any
+ * unlayered rule (the UI's own styles, the <noscript> block in index.html) wins without a specificity fight.
+ */
+@layer base {
+  :root {
+    /* Mirrors PALETTE and FONT_FAMILY in src/contracts.ts; CSS cannot import them. */
+    --void: #05070a;
+    --deep: #08121c;
+    --surface: #0b0f14;
+    --navy: #0e3a5c;
+    --blue: #1f8fe0;
+    --cyan: #22c8ee;
+    --teal: #2dd4c4;
+    --ink: #e8edf2;
+    --dim: #8a97a6;
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* The experience scrolls virtually; stop pull-to-refresh and rubber-banding from fighting it. */
+    overscroll-behavior: none;
+    background: var(--void);
+    color: var(--ink);
+    font-family: var(--font-mono);
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  #gl {
+    position: fixed;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+  }
+
+  #ui {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+  }
+}
